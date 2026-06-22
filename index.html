@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>میناب168 - منوی اصلی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .menu-container {
+            width: 400px;
+            max-width: 95%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 30px 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #00d2ff;
+            padding: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .username {
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .bio {
+            font-size: 0.85em;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.95em;
+            outline: none;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+        }
+
+        .search-box::placeholder {
+            color: #888;
+        }
+
+        .search-box:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .menu-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            padding-right: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            margin-bottom: 5px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(-5px);
+        }
+
+        .menu-item:active {
+            transform: scale(0.97);
+        }
+
+        .menu-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .menu-info {
+            flex: 1;
+        }
+
+        .menu-name {
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .menu-subtitle {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: #ff4757;
+            color: #fff;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        .badge.channel {
+            background: #00d2ff;
+        }
+
+        .badge.group {
+            background: #7bed9f;
+            color: #333;
+        }
+
+        .badge.personal {
+            background: #ffa502;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 10px 0;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 71, 87, 0.15);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 15px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 71, 87, 0.25);
+        }
+
+        .online-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #7bed9f;
+            display: inline-block;
+            margin-left: 5px;
+            box-shadow: 0 0 10px #7bed9f;
+        }
+
+        /* اسکرول */
+        .menu-items-scroll {
+            max-height: 350px;
+            overflow-y: auto;
+            padding-left: 5px;
+        }
+
+        .menu-items-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .menu-items-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .menu-items-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .add-btn {
+            background: rgba(0, 210, 255, 0.2);
+            color: #00d2ff;
+            border: 1px dashed rgba(0, 210, 255, 0.4);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .add-btn:hover {
+            background: rgba(0, 210, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        
+        <!-- بخش پروفایل -->
+        <div class="profile-section">
+            <img class="avatar" src="https://i.pravatar.cc/150?u=user1" alt="آواتار">
+            <div class="username">کاربر میناب <span class="online-dot"></span></div>
+            <div class="bio">یه بیوگرافی کوتاه اینجا قرار می‌گیره...</div>
+        </div>
+
+        <!-- جستجو -->
+        <input type="text" class="search-box" placeholder="🔍 جستجو در چت‌ها، کانال‌ها و گروه‌ها...">
+
+        <!-- منو -->
+        <div class="menu-items-scroll">
+            
+            <!-- کانال‌ها -->
+            <div class="menu-section">
+                <div class="section-title">📢 کانال‌ها</div>
+                
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(0,210,255,0.2);">📢</div>
+                    <div class="menu-info">
+                        <div class="menu-name">اخبار میناب</div>
+                        <div class="menu-subtitle">2.5K عضو • آخرین پیام: 5 دقیقه پیش</div>
+                    </div>
+                    <span class="badge channel">3+</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(0,210,255,0.2);">📢</div>
+                    <div class="menu-info">
+                        <div class="menu-name">فناوری و گجت</div>
+                        <div class="menu-subtitle">1.2K عضو • آخرین پیام: 1 ساعت پیش</div>
+                    </div>
+                </div>
+
+                <div class="add-btn">+ ساخت کانال جدید</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- گروه‌ها -->
+            <div class="menu-section">
+                <div class="section-title">👥 گروه‌ها</div>
+                
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(123,237,159,0.2);">👥</div>
+                    <div class="menu-info">
+                        <div class="menu-name">رفقای قدیمی</div>
+                        <div class="menu-subtitle">12 نفر • علی: 😂 حرف نداشت</div>
+                    </div>
+                    <span class="badge group">5</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(123,237,159,0.2);">👥</div>
+                    <div class="menu-info">
+                        <div class="menu-name">برنامه‌نویس‌ها</div>
+                        <div class="menu-subtitle">45 نفر • مریم: کد بزنیم؟</div>
+                    </div>
+                    <span class="badge group">2</span>
+                </div>
+
+                <div class="add-btn">+ ساخت گروه جدید</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- پیام‌های شخصی -->
+            <div class="menu-section">
+                <div class="section-title">💬 پیام‌های شخصی</div>
+                
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(255,165,2,0.2);">💬</div>
+                    <div class="menu-info">
+                        <div class="menu-name">حسین</div>
+                        <div class="menu-subtitle">دیشب کجا بودی؟ 😄</div>
+                    </div>
+                    <span class="badge personal">1</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(255,165,2,0.2);">💬</div>
+                    <div class="menu-info">
+                        <div class="menu-name">مریم</div>
+                        <div class="menu-subtitle">فردا می‌ای شرکت؟</div>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon" style="background: rgba(255,165,2,0.2);">💬</div>
+                    <div class="menu-info">
+                        <div class="menu-name">رضا</div>
+                        <div class="menu-subtitle">عکس فرستاد</div>
+                    </div>
+                    <span class="badge personal">4</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- خروج -->
+        <button class="logout-btn">🚪 خروج از حساب</button>
+    </div>
+
+    <script>
+        // اینجا بعداً کدهای جاوااسکریپت رو می‌نویسیم
+        // مثل دریافت داده از Apps Script و پر کردن منو
+        
+        console.log('میناب168 - منوی اصلی آماده است');
+    </script>
+</body>
+</html>
