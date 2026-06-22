@@ -378,6 +378,39 @@
             margin-bottom: 15px;
         }
 
+        /* نویگیشن پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid #f0ede8;
+            display: flex;
+            padding: 8px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+            z-index: 50;
+        }
+
+        .bottom-nav a {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            color: #aaa;
+            font-size: 0.75em;
+            transition: all 0.3s;
+        }
+
+        .bottom-nav a.active {
+            color: #c9a96e;
+        }
+
+        .bottom-nav a i {
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 2px;
+        }
+
         @media (max-width: 400px) {
             .theme-options {
                 grid-template-columns: repeat(2, 1fr);
@@ -486,7 +519,7 @@
             </div>
         </div>
 
-              <!-- پشتیبان‌گیری -->
+                <!-- پشتیبان‌گیری -->
         <div class="section">
             <div class="section-title">
                 <i class="fa-solid fa-cloud-arrow-down"></i> پشتیبان‌گیری از تنظیمات
@@ -518,18 +551,39 @@
 
     </div>
 
+    <!-- نویگیشن پایین -->
+    <div class="bottom-nav">
+        <a href="vitrine.html">
+            <i class="fa-solid fa-store"></i>
+            ویترین
+        </a>
+        <a href="messenger.html">
+            <i class="fa-regular fa-comments"></i>
+            پیامرسان
+        </a>
+        <a href="settings.html" class="active">
+            <i class="fa-solid fa-gear"></i>
+            تنظیمات
+        </a>
+    </div>
+
     <!-- پیغام -->
     <div class="toast" id="toast"></div>
 
     <script>
+        // آدرس Apps Script
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwI4fYrjZmu3CFwI-o9uo-RbQCbMbvt7tifBp1edpefl6oqsz2M80PllA_N3j3JZllIXw/exec';
+
         let currentSettings = {};
         let avatarBase64 = '';
+        let isNewUser = true;
 
         function loadSettings() {
             const saved = localStorage.getItem('minab168_settings');
             
             if (saved) {
                 currentSettings = JSON.parse(saved);
+                isNewUser = false;
             } else {
                 currentSettings = {
                     profile: {
@@ -546,6 +600,7 @@
                         linkPreview: true
                     }
                 };
+                isNewUser = true;
             }
 
             applySettingsToForm();
@@ -603,7 +658,8 @@
             currentSettings.appearance.fontSize = size;
         }
 
-        function saveSettings() {
+        async function saveSettings() {
+            // خواندن از فرم
             currentSettings.profile.username = document.getElementById('usernameInput').value.trim();
             currentSettings.profile.displayName = document.getElementById('displayNameInput').value.trim();
             currentSettings.profile.bio = document.getElementById('bioInput').value.trim();
@@ -616,11 +672,13 @@
             currentSettings.appearance.typingIndicator = document.getElementById('typingToggle').checked;
             currentSettings.appearance.linkPreview = document.getElementById('linkPreviewToggle').checked;
 
+            // اعتبارسنجی
             if (!currentSettings.profile.username) {
                 showToast('لطفاً آیدی را وارد کنید');
                 return;
             }
 
+            // ذخیره در localStorage
             localStorage.setItem('minab168_settings', JSON.stringify(currentSettings));
 
             const userData = {
@@ -633,7 +691,34 @@
             };
             localStorage.setItem('minab168_user', JSON.stringify(userData));
 
-            showToast('تنظیمات با موفقیت ذخیره شد');
+            // ذخیره در Google Sheets
+            try {
+                const action = isNewUser ? 'register' : 'updateUser';
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: action,
+                        userID: currentSettings.profile.username,
+                        username: currentSettings.profile.username,
+                        displayName: currentSettings.profile.displayName,
+                        bio: currentSettings.profile.bio,
+                        avatar: currentSettings.profile.avatar
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    isNewUser = false;
+                    showToast('تنظیمات با موفقیت ذخیره شد');
+                } else {
+                    showToast('خطا در ذخیره در سرور: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error saving to sheet:', error);
+                showToast('تنظیمات محلی ذخیره شد (آفلاین)');
+            }
         }
 
         function exportSettings() {
@@ -666,6 +751,7 @@
                         localStorage.setItem('minab168_settings', JSON.stringify(currentSettings));
                         applySettingsToForm();
                         avatarBase64 = currentSettings.profile.avatar || '';
+                        isNewUser = false;
                         showToast('تنظیمات با موفقیت بازیابی شد');
                     } else {
                         showToast('فایل تنظیمات نامعتبر است');
@@ -682,6 +768,7 @@
                 localStorage.removeItem('minab168_settings');
                 localStorage.removeItem('minab168_user');
                 avatarBase64 = '';
+                isNewUser = true;
                 currentSettings = {
                     profile: { username: '', displayName: '', bio: '', avatar: '' },
                     appearance: { theme: 'cream', fontSize: 'medium', notifications: true, typingIndicator: true, linkPreview: true }
