@@ -39,19 +39,6 @@
             font-weight: 600;
         }
 
-        .back-btn {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #c9a96e;
-            font-size: 1.3em;
-            cursor: pointer;
-            padding: 5px;
-        }
-
         .main-content {
             max-width: 500px;
             margin: 0 auto;
@@ -378,7 +365,6 @@
             margin-bottom: 15px;
         }
 
-        /* نویگیشن پایین */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -421,9 +407,6 @@
 <body>
 
     <div class="header">
-        <button class="back-btn" onclick="goBack()">
-            <i class="fa-solid fa-arrow-right"></i>
-        </button>
         <h2>تنظیمات</h2>
     </div>
 
@@ -571,7 +554,6 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // آدرس Apps Script
         const API_URL = 'https://script.google.com/macros/s/AKfycbwI4fYrjZmu3CFwI-o9uo-RbQCbMbvt7tifBp1edpefl6oqsz2M80PllA_N3j3JZllIXw/exec';
 
         let currentSettings = {};
@@ -659,7 +641,6 @@
         }
 
         async function saveSettings() {
-            // خواندن از فرم
             currentSettings.profile.username = document.getElementById('usernameInput').value.trim();
             currentSettings.profile.displayName = document.getElementById('displayNameInput').value.trim();
             currentSettings.profile.bio = document.getElementById('bioInput').value.trim();
@@ -672,13 +653,11 @@
             currentSettings.appearance.typingIndicator = document.getElementById('typingToggle').checked;
             currentSettings.appearance.linkPreview = document.getElementById('linkPreviewToggle').checked;
 
-            // اعتبارسنجی
             if (!currentSettings.profile.username) {
                 showToast('لطفاً آیدی را وارد کنید');
                 return;
             }
 
-            // ذخیره در localStorage
             localStorage.setItem('minab168_settings', JSON.stringify(currentSettings));
 
             const userData = {
@@ -691,7 +670,6 @@
             };
             localStorage.setItem('minab168_user', JSON.stringify(userData));
 
-            // ذخیره در Google Sheets
             try {
                 const action = isNewUser ? 'register' : 'updateUser';
                 
@@ -784,10 +762,6 @@
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        function goBack() {
-            window.history.back();
         }
 
         window.onload = loadSettings;
